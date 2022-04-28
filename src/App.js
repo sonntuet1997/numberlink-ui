@@ -1,9 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import {useEffect, useState} from "react";
+import axios from "axios";
 
 function App() {
-  const [dataInput, setDataInput] = useState(`1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+  const [dataInput, setDataInput] = useState(`40 10
+1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . 6 . . . . . . . . . . . . . . . . . 
 . . . . 2 4 . 4 . . . . . . . . . . . . . . . . 8 . . . . . . . . . . . . . . . 
 . . . . . . . 5 . . . . . . . . . . . . . . . . . . . . 5 . . 9 3 . . . . . . . 
@@ -38,6 +40,7 @@ function App() {
   }, []);
   useEffect(() => {
     const t = dataInput.split('\n');
+    t.shift();
     setDataRows(t);
   }, [dataInput]);
   useEffect(() => {
@@ -51,14 +54,17 @@ function App() {
     setResultInput(v.target.value);
   }
   const solve = () => {
-
+    axios.post(`https://api.numberlink.uetbc.xyz/solve`, {data: dataInput})
+      .then(res => {
+        setResultInput(res.data.result ?? '')
+      })
   }
   return (
     <div className="App">
       <button style={{width: '200px', height: '80px', position: 'fixed', top: '0', left: '0'}}
               onClick={solve}>Solve {separateNumber}</button>
-      <textarea onChange={setValue}/>
-      <textarea onChange={setResult}/>
+      <textarea value={dataInput} onChange={setValue}/>
+      <textarea value={resultInput} onChange={setResult}/>
       {dataRows.map((row, i) => {
         const cells = row.split(/(\s+)/).filter((e) => {
           return e.trim().length > 0;
@@ -70,11 +76,11 @@ function App() {
             {cells.map((c, j) => {
               return (<div style={{
                 display: 'inline-table',
-                width: (c === '.' || c === '0') ? '65px' : '57px' ,
-                height: (c === '.' || c === '0') ? '65px' : '57px' ,
+                width: (c === '.' || c === '0') ? '65px' : '57px',
+                height: (c === '.' || c === '0') ? '65px' : '57px',
                 backgroundColor: colorTable[resultCells[j] ?? (c === '.' || c === '0' ? '' : c)],
-                border:(c === '.' || c === '0') ? '' : borderWidth,
-                lineHeight:  (c === '.' || c === '0') ? '65px' : '57px'
+                border: (c === '.' || c === '0') ? '' : borderWidth,
+                lineHeight: (c === '.' || c === '0') ? '65px' : '57px'
               }}>
                 &nbsp;{resultCells[j] ?? (c === '.' || c === '0' ? '' : c)}
               </div>)
