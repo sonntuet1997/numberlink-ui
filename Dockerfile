@@ -10,8 +10,9 @@ RUN apk --no-cache add \
 RUN mkdir -p /app/api
 WORKDIR /app/api
 
-COPY . .
+COPY package.json .
+COPY yarn.lock .
 
 RUN yarn
-
+COPY . .
 CMD ["yarn", "start"]
