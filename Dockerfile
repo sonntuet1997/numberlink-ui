@@ -7,6 +7,10 @@ RUN apk --no-cache add \
     ca-certificates \
     && rm -rf /var/cache/apk/*
 
+RUN mkdir -p /app/api
+WORKDIR /app/api
+
+COPY . .
 
 RUN yarn
 
