@@ -27,6 +27,7 @@ function App() {
   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   3   3   3   3   3   3   3   3   3   3   3   3   3   3   7   7   7
 `);
   const [dataRows, setDataRows] = useState([]);
+  const [runTime, setRunTime] = useState("");
   const [resultRows, setResultRows] = useState([]);
   const [separateNumber, setSeparateNumber] = useState(1);
   const [borderWidth, setBorderWidth] = useState('solid 4px red');
@@ -57,6 +58,7 @@ function App() {
     axios.post(`https://api.numberlink.uetbc.xyz/solve`, {data: dataInput})
       .then(res => {
         setResultInput(res.data.result ?? '')
+        setRunTime(res.data.runtime ?? '')
       })
   }
   return (
@@ -65,6 +67,7 @@ function App() {
               onClick={solve}>Solve {separateNumber}</button>
       <textarea value={dataInput} onChange={setValue}/>
       <textarea value={resultInput} onChange={setResult}/>
+      <h2>{runTime}</h2>
       {dataRows.map((row, i) => {
         const cells = row.split(/(\s+)/).filter((e) => {
           return e.trim().length > 0;
