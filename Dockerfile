@@ -10,4 +10,4 @@ RUN apk --no-cache add \
 
 RUN yarn
 
-CMD ["/bin/bash", "yarn start"]
+CMD ["yarn start"]
